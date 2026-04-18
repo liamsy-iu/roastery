@@ -50,12 +50,12 @@ class ContactMessage(BaseModel):
 PRODUCTS = [
     {
         "id": 1,
-        "name": "Ard Al Yaman",
+        "name": "Kenya AA Kiambu",
         "category": "whole-bean",
-        "description": "A rare Yemeni single-origin with centuries of heritage. Wild-grown at elevation, naturally processed on raised beds.",
-        "origin": "Yemen",
-        "flavor_notes": ["Dark chocolate", "Dried fig", "Cardamom"],
-        "price": 85.00,
+        "description": "Our flagship Kenyan single-origin, sourced from small farms in Kiambu County. Washed and dried on raised beds under Nairobi's highland sun.",
+        "origin": "Kiambu, Kenya",
+        "flavor_notes": ["Blackcurrant", "Brown sugar", "Bright citrus"],
+        "price": 1800.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&q=80",
         "badge": "Single Origin",
@@ -66,9 +66,9 @@ PRODUCTS = [
         "name": "Ethiopian Yirgacheffe",
         "category": "whole-bean",
         "description": "Washed and sun-dried to perfection. Grown by small-holder farmers in the birthplace of coffee.",
-        "origin": "Ethiopia",
+        "origin": "Yirgacheffe, Ethiopia",
         "flavor_notes": ["Jasmine", "Lemon zest", "Peach"],
-        "price": 75.00,
+        "price": 1600.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80",
         "badge": "Staff Pick",
@@ -81,7 +81,7 @@ PRODUCTS = [
         "description": "Our signature house blend, roasted to bring out rich body and smooth crema. The everyday cup, perfected.",
         "origin": "Brazil × Colombia",
         "flavor_notes": ["Hazelnut", "Caramel", "Dark cocoa"],
-        "price": 65.00,
+        "price": 1400.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&q=80",
         "badge": "House Blend",
@@ -92,33 +92,35 @@ PRODUCTS = [
         "name": "Colombian Huila",
         "category": "ground",
         "description": "Medium-fine ground for drip and pour-over. Grown at high altitude in the Huila department.",
-        "origin": "Colombia",
+        "origin": "Huila, Colombia",
         "flavor_notes": ["Brown sugar", "Red apple", "Walnut"],
-        "price": 60.00,
+        "price": 1300.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80",
+        "badge": None,
         "in_stock": True,
     },
     {
         "id": 5,
-        "name": "Sumatra Mandheling",
+        "name": "Kenya Nyeri AB",
         "category": "ground",
-        "description": "Wet-hulled and medium-coarse ground, perfect for French press. Bold, earthy, and unforgettable.",
-        "origin": "Indonesia",
-        "flavor_notes": ["Cedar", "Dark chocolate", "Tobacco"],
-        "price": 60.00,
+        "description": "Medium-coarse ground ideal for French press and Chemex. Grown on the slopes of Mt. Kenya in Nyeri County.",
+        "origin": "Nyeri, Kenya",
+        "flavor_notes": ["Tomato", "Grapefruit", "Dark berry"],
+        "price": 1300.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1504630083234-14187a9df0f5?w=600&q=80",
+        "badge": None,
         "in_stock": True,
     },
     {
         "id": 6,
         "name": "The Explorer Box",
         "category": "subscription",
-        "description": "Every month, two new single-origin coffees chosen by our head roaster. Whole bean. Free shipping. Cancel anytime.",
+        "description": "Every month, two new single-origin coffees chosen by our head roaster. Whole bean. Free delivery. Cancel anytime.",
         "origin": "Rotating — 12+ countries/year",
         "flavor_notes": ["Varies monthly", "Curated", "Surprising"],
-        "price": 120.00,
+        "price": 2800.00,
         "weight": "2 × 250g",
         "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80",
         "badge": "Monthly",
@@ -128,10 +130,10 @@ PRODUCTS = [
         "id": 7,
         "name": "The Roaster's Pick",
         "category": "subscription",
-        "description": "Our most exclusive subscription. One exceptional micro-lot per month, hand-selected from auctions worldwide.",
-        "origin": "Worldwide",
+        "description": "One exceptional micro-lot per month, hand-selected from East African auctions worldwide.",
+        "origin": "East Africa & Beyond",
         "flavor_notes": ["Exclusive lots", "Limited quantity", "Premium"],
-        "price": 180.00,
+        "price": 4200.00,
         "weight": "250g",
         "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80",
         "badge": "Limited",
@@ -160,7 +162,7 @@ def get_product(product_id: int):
 @app.post("/orders/whatsapp-link")
 def create_whatsapp_order(order: Order):
     """Generate a WhatsApp pre-filled link for the order."""
-    WHATSAPP_NUMBER = "966500000000"  # Replace with actual number
+    WHATSAPP_NUMBER = "254742471824"  # Replace with actual number
 
     lines = [f"🌿 *65° Coffee Roastery — New Order*", ""]
     lines.append(f"👤 Customer: {order.customer_name}")
@@ -173,10 +175,10 @@ def create_whatsapp_order(order: Order):
     for item in order.items:
         subtotal = item.quantity * item.price
         total += subtotal
-        lines.append(f"  • {item.product_name} × {item.quantity} — SAR {subtotal:.2f}")
+        lines.append(f"  • {item.product_name} × {item.quantity} — KES {subtotal:.2f}")
 
     lines.append("")
-    lines.append(f"💰 *Total: SAR {total:.2f}*")
+    lines.append(f"💰 *Total: KES {total:.2f}*")
 
     if order.notes:
         lines.append(f"\n📝 Notes: {order.notes}")

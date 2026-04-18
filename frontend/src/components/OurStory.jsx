@@ -22,7 +22,8 @@ export default function OurStory() {
         <div className="story-text-col">
           <p className="section-label">Our Story</p>
           <h2 className="story-heading">
-            The number that<br />
+            The number that
+            <br />
             <em>changed everything.</em>
           </h2>
           <p className="story-body">
@@ -31,10 +32,11 @@ export default function OurStory() {
             became our obsession, and our name.
           </p>
           <p className="story-body">
-            Founded in Madinah, we believe specialty coffee isn't reserved for
-            big cities. We work directly with smallholder farmers across Yemen,
-            Ethiopia, Colombia, and Indonesia — building relationships that
-            put quality first at every level of the chain.
+            Founded in Nairobi, we believe great coffee should start at home.
+            Kenya sits at the heart of the world's finest growing regions, and
+            we work directly with smallholder farmers across East Africa and
+            beyond — building relationships that put quality first at every
+            level.
           </p>
           <div className="story-values">
             <div className="story-value">
@@ -55,7 +57,7 @@ export default function OurStory() {
               <div className="value-icon">◎</div>
               <div>
                 <h4>Free Delivery</h4>
-                <p>Across Saudi Arabia, within 48 hours.</p>
+                <p>Across Kenya & beyond, within 48 hours.</p>
               </div>
             </div>
           </div>

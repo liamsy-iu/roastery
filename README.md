@@ -66,18 +66,23 @@ Site will be live at: `http://localhost:5173`
 ## Configuration
 
 ### WhatsApp Number
+
 In `backend/main.py`, update line 78:
+
 ```python
-WHATSAPP_NUMBER = "966500000000"  # Replace with your actual WhatsApp number
+WHATSAPP_NUMBER = "254700000000"  # Replace with your actual WhatsApp number
 ```
 
 ### Backend URL (Production)
+
 In `frontend/src/api.js`, update:
+
 ```js
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 ```
 
 Or create a `.env` file in the frontend folder:
+
 ```
 VITE_API_URL=https://your-backend-domain.com
 ```
@@ -86,32 +91,33 @@ VITE_API_URL=https://your-backend-domain.com
 
 ## Features
 
-| Feature | Details |
-|---|---|
-| 🛒 Cart | Add/remove items, adjust quantity, persistent during session |
-| 📱 WhatsApp Checkout | Pre-filled order message sent to your WhatsApp |
-| 🔍 Product Filters | Filter by Whole Bean / Ground / Subscriptions |
-| 📦 7 Products | 3 whole bean, 2 ground, 2 subscription tiers |
-| 📬 Contact Form | Sends messages via `/contact` endpoint |
-| 📱 Mobile Responsive | Works on all screen sizes |
-| ⚡ Fast | Vite build, lazy-loaded images |
+| Feature              | Details                                                      |
+| -------------------- | ------------------------------------------------------------ |
+| 🛒 Cart              | Add/remove items, adjust quantity, persistent during session |
+| 📱 WhatsApp Checkout | Pre-filled order message sent to your WhatsApp               |
+| 🔍 Product Filters   | Filter by Whole Bean / Ground / Subscriptions                |
+| 📦 7 Products        | 3 whole bean, 2 ground, 2 subscription tiers                 |
+| 📬 Contact Form      | Sends messages via `/contact` endpoint                       |
+| 📱 Mobile Responsive | Works on all screen sizes                                    |
+| ⚡ Fast              | Vite build, lazy-loaded images                               |
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/products` | All products (optional `?category=whole-bean`) |
-| GET | `/products/{id}` | Single product |
-| POST | `/orders/whatsapp-link` | Generate WhatsApp checkout URL |
-| POST | `/contact` | Submit contact form |
+| Method | Endpoint                | Description                                    |
+| ------ | ----------------------- | ---------------------------------------------- |
+| GET    | `/products`             | All products (optional `?category=whole-bean`) |
+| GET    | `/products/{id}`        | Single product                                 |
+| POST   | `/orders/whatsapp-link` | Generate WhatsApp checkout URL                 |
+| POST   | `/contact`              | Submit contact form                            |
 
 ---
 
 ## Deployment
 
 ### Frontend → Vercel / Netlify
+
 ```bash
 cd frontend
 npm run build
@@ -119,6 +125,7 @@ npm run build
 ```
 
 ### Backend → Railway / Render / VPS
+
 ```bash
 # Set environment and run
 uvicorn main:app --host 0.0.0.0 --port 8000
@@ -129,23 +136,27 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 ## Customization
 
 ### Adding Products
+
 Edit the `PRODUCTS` list in `backend/main.py`. Each product needs:
+
 - `id`, `name`, `category`, `description`, `origin`
 - `flavor_notes` (list of strings)
-- `price` (in SAR), `weight`, `image` (URL)
+- `price` (in KES), `weight`, `image` (URL)
 - Optional: `badge`, `in_stock`
 
 ### Brand Colors
+
 Edit CSS variables in `frontend/src/index.css`:
+
 ```css
 :root {
-  --cream: #F5EFE0;
-  --brown-dark: #1C1008;
-  --gold: #C8922A;
+  --cream: #f5efe0;
+  --brown-dark: #1c1008;
+  --gold: #c8922a;
   /* ... */
 }
 ```
 
 ---
 
-Built with ☕ for 65° Coffee Roastery, Madinah 🇸🇦
+Built with ☕ for 65° Coffee Roastery, Nairobi 🇰🇪
