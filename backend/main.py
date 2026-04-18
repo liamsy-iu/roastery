@@ -6,7 +6,7 @@ from typing import List, Optional
 import json, os, secrets, urllib.parse
 from datetime import datetime
 
-app = FastAPI(title="65° Coffee Roastery API")
+app = FastAPI(title="65° Coffee Roastery API", root_path="")
 security = HTTPBasic()
 
 app.add_middleware(
