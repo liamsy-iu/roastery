@@ -4,6 +4,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 from typing import List, Optional
 import json, os, secrets, urllib.parse
+from datetime import datetime
 
 app = FastAPI(title="65° Coffee Roastery API")
 security = HTTPBasic()
@@ -16,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Admin credentials (set via environment variables on Render) ---
+# --- Admin credentials ---
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
 ADMIN_PASS = os.environ.get("ADMIN_PASS", "changeme123")
 
@@ -32,7 +33,9 @@ def require_admin(credentials: HTTPBasicCredentials = Depends(security)):
     return credentials.username
 
 # --- File persistence ---
-PRODUCTS_FILE = os.path.join(os.path.dirname(__file__), "products.json")
+BASE_DIR = os.path.dirname(__file__)
+PRODUCTS_FILE = os.path.join(BASE_DIR, "products.json")
+ORDERS_FILE = os.path.join(BASE_DIR, "orders.json")
 
 DEFAULT_PRODUCTS = [
     {"id": 1, "name": "Kenya AA Kiambu", "category": "whole-bean", "description": "Our flagship Kenyan single-origin, sourced from small farms in Kiambu County. Washed and dried on raised beds under Nairobi's highland sun.", "origin": "Kiambu, Kenya", "flavor_notes": ["Blackcurrant", "Brown sugar", "Bright citrus"], "price": 1800.0, "weight": "250g", "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&q=80", "badge": "Single Origin", "in_stock": True},
@@ -53,6 +56,16 @@ def load_products():
 def save_products(products):
     with open(PRODUCTS_FILE, "w") as f:
         json.dump(products, f, indent=2)
+
+def load_orders():
+    if os.path.exists(ORDERS_FILE):
+        with open(ORDERS_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+def save_orders(orders):
+    with open(ORDERS_FILE, "w") as f:
+        json.dump(orders, f, indent=2)
 
 # --- Data Models ---
 class Product(BaseModel):
@@ -93,6 +106,9 @@ class Order(BaseModel):
     customer_city: str
     notes: Optional[str] = ""
 
+class OrderStatusUpdate(BaseModel):
+    status: str  # new | confirmed | dispatched | delivered | cancelled
+
 class ContactMessage(BaseModel):
     name: str
     email: str
@@ -101,7 +117,7 @@ class ContactMessage(BaseModel):
 # --- Public Routes ---
 @app.get("/")
 def root():
-    return {"message": "65° Coffee Roastery API", "version": "2.0"}
+    return {"message": "65° Coffee Roastery API", "version": "3.0"}
 
 @app.get("/products", response_model=List[Product])
 def get_products(category: Optional[str] = None):
@@ -121,30 +137,57 @@ def get_product(product_id: int):
 @app.post("/orders/whatsapp-link")
 def create_whatsapp_order(order: Order):
     WHATSAPP_NUMBER = os.environ.get("WHATSAPP_NUMBER", "254700000000")
-    lines = ["🌿 *65° Coffee Roastery — New Order*", ""]
+
+    # Calculate total
+    total = sum(item.quantity * item.price for item in order.items)
+
+    # Save order to file
+    orders = load_orders()
+    new_id = max((o["id"] for o in orders), default=1000) + 1
+    new_order = {
+        "id": new_id,
+        "order_number": f"ORD-{new_id}",
+        "status": "new",
+        "customer_name": order.customer_name,
+        "customer_phone": order.customer_phone,
+        "customer_city": order.customer_city,
+        "notes": order.notes or "",
+        "items": [item.model_dump() for item in order.items],
+        "total": total,
+        "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat(),
+    }
+    orders.append(new_order)
+    save_orders(orders)
+
+    # Build WhatsApp message
+    lines = [f"🌿 *65° Coffee Roastery — Order #{new_order['order_number']}*", ""]
     lines.append(f"👤 Customer: {order.customer_name}")
     lines.append(f"📍 City: {order.customer_city}")
     lines.append(f"📱 Phone: {order.customer_phone}")
     lines.append("")
     lines.append("☕ *Order Details:*")
-    total = 0
     for item in order.items:
         subtotal = item.quantity * item.price
-        total += subtotal
         lines.append(f"  • {item.product_name} × {item.quantity} — KES {subtotal:.0f}")
     lines.append("")
     lines.append(f"💰 *Total: KES {total:.0f}*")
     if order.notes:
         lines.append(f"\n📝 Notes: {order.notes}")
+
     message = "\n".join(lines)
     encoded = urllib.parse.quote(message)
-    return {"whatsapp_url": f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}", "total": total}
+    return {
+        "whatsapp_url": f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}",
+        "total": total,
+        "order_number": new_order["order_number"],
+    }
 
 @app.post("/contact")
 def send_contact(msg: ContactMessage):
     return {"success": True, "message": "Message received. We'll be in touch within 24 hours."}
 
-# --- Admin Routes (password protected) ---
+# --- Admin: Products ---
 @app.get("/admin/products", response_model=List[Product])
 def admin_get_products(username: str = Depends(require_admin)):
     return load_products()
@@ -187,3 +230,33 @@ def admin_toggle_stock(product_id: int, username: str = Depends(require_admin)):
     products[idx]["in_stock"] = not products[idx]["in_stock"]
     save_products(products)
     return products[idx]
+
+# --- Admin: Orders ---
+@app.get("/admin/orders")
+def admin_get_orders(username: str = Depends(require_admin)):
+    orders = load_orders()
+    # Return newest first
+    return sorted(orders, key=lambda o: o["created_at"], reverse=True)
+
+@app.patch("/admin/orders/{order_id}/status")
+def admin_update_order_status(order_id: int, update: OrderStatusUpdate, username: str = Depends(require_admin)):
+    valid_statuses = {"new", "confirmed", "dispatched", "delivered", "cancelled"}
+    if update.status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    orders = load_orders()
+    idx = next((i for i, o in enumerate(orders) if o["id"] == order_id), None)
+    if idx is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    orders[idx]["status"] = update.status
+    orders[idx]["updated_at"] = datetime.utcnow().isoformat()
+    save_orders(orders)
+    return orders[idx]
+
+@app.delete("/admin/orders/{order_id}")
+def admin_delete_order(order_id: int, username: str = Depends(require_admin)):
+    orders = load_orders()
+    new_list = [o for o in orders if o["id"] != order_id]
+    if len(new_list) == len(orders):
+        raise HTTPException(status_code=404, detail="Order not found")
+    save_orders(new_list)
+    return {"success": True, "deleted_id": order_id}
