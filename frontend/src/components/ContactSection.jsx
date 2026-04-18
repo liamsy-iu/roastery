@@ -40,7 +40,7 @@ export default function ContactSection() {
 
           <div className="contact-details">
             <a
-              href="https://wa.me/254700000000"
+              href="https://wa.me/254742471824"
               className="contact-detail"
               target="_blank"
               rel="noreferrer"
@@ -57,7 +57,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <span className="detail-label">WhatsApp</span>
-                <span className="detail-value">+254 700 000 000</span>
+                <span className="detail-value">+254 742 471 824</span>
               </div>
             </a>
 

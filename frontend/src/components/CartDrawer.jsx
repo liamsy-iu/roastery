@@ -51,7 +51,7 @@ export default function CartDrawer() {
       close();
     } catch {
       // Fallback: build WhatsApp link client-side
-      const PHONE = "254700000000";
+      const PHONE = "254742471824";
       let msg = `🌿 *65° Coffee Roastery — New Order*\n\n`;
       msg += `👤 ${form.name}\n📍 ${form.city}\n📱 ${form.phone}\n\n☕ *Order:*\n`;
       items.forEach((i) => {
@@ -203,7 +203,7 @@ export default function CartDrawer() {
                 name="phone"
                 value={form.phone}
                 onChange={handleFormChange}
-                placeholder="+254 7XX XXX XXX"
+                placeholder="+254 742 471 824"
                 required
               />
             </div>
