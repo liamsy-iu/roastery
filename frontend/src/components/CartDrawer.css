@@ -53,7 +53,9 @@
   padding: 4px;
   transition: color 0.2s;
 }
-.cart-close:hover { color: var(--brown-dark); }
+.cart-close:hover {
+  color: var(--brown-dark);
+}
 
 .cart-empty {
   flex: 1;
@@ -166,7 +168,9 @@
   cursor: pointer;
   transition: color 0.2s;
 }
-.remove-btn:hover { color: #c0392b; }
+.remove-btn:hover {
+  color: #c0392b;
+}
 
 .cart-footer {
   padding: 20px 28px 28px;
@@ -202,7 +206,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: #25D366;
+  background: #25d366;
   color: white;
   padding: 15px 24px;
   font-family: var(--font-body);
@@ -215,8 +219,13 @@
   transition: background 0.2s;
   width: 100%;
 }
-.whatsapp-btn:hover:not(:disabled) { background: #1ebe5d; }
-.whatsapp-btn:disabled { opacity: 0.7; cursor: wait; }
+.whatsapp-btn:hover:not(:disabled) {
+  background: #1ebe5d;
+}
+.whatsapp-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
 
 /* Checkout Form */
 .checkout-form {
@@ -231,7 +240,9 @@
   padding: 0 28px;
 }
 
-.checkout-form > :first-child { margin-top: 24px; }
+.checkout-form > :first-child {
+  margin-top: 24px;
+}
 
 .form-group {
   margin-bottom: 16px;
@@ -275,5 +286,50 @@
 }
 
 .checkout-form .cart-footer {
+  margin-top: auto;
+}
+
+/* Ready step */
+.cart-ready {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 28px 0;
+  text-align: center;
+  gap: 14px;
+}
+
+.ready-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(37, 211, 102, 0.1);
+  color: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.cart-ready h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--brown-dark);
+}
+
+.cart-ready p {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.cart-ready .cart-footer {
+  width: 100%;
+  border-top: none;
   margin-top: auto;
 }

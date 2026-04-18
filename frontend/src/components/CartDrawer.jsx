@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { createWhatsAppOrder } from "../api";
 import "./CartDrawer.css";
 
 export default function CartDrawer() {
   const { open, items, total, count, dispatch } = useCart();
-  const [step, setStep] = useState("cart"); // cart | form | sending
+  const [step, setStep] = useState("cart"); // cart | form | ready
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -13,59 +12,45 @@ export default function CartDrawer() {
     notes: "",
   });
   const [error, setError] = useState("");
+  const [whatsappUrl, setWhatsappUrl] = useState("");
 
   const close = () => {
     dispatch({ type: "CLOSE" });
-    setTimeout(() => setStep("cart"), 300);
+    setTimeout(() => {
+      setStep("cart");
+      setWhatsappUrl("");
+    }, 300);
   };
 
   const handleFormChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleCheckout = async (e) => {
+  const buildWhatsappUrl = () => {
+    const PHONE = "254700000000"; // Replace with your real number
+    let msg = `🌿 *65° Coffee Roastery — New Order*\n\n`;
+    msg += `👤 ${form.name}\n📍 ${form.city}\n📱 ${form.phone}\n\n☕ *Order:*\n`;
+    items.forEach((i) => {
+      msg += `  • ${i.name} × ${i.quantity} — KES ${(i.price * i.quantity).toFixed(0)}\n`;
+    });
+    msg += `\n💰 *Total: KES ${total.toFixed(0)}*`;
+    if (form.notes) msg += `\n📝 ${form.notes}`;
+    return `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+  };
+
+  const handlePrepareOrder = (e) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.city) {
       setError("Please fill in all required fields.");
       return;
     }
-    setStep("sending");
     setError("");
+    setWhatsappUrl(buildWhatsappUrl());
+    setStep("ready");
+  };
 
-    const order = {
-      items: items.map((i) => ({
-        product_id: i.id,
-        product_name: i.name,
-        quantity: i.quantity,
-        price: i.price,
-      })),
-      customer_name: form.name,
-      customer_phone: form.phone,
-      customer_city: form.city,
-      notes: form.notes,
-    };
-
-    try {
-      const res = await createWhatsAppOrder(order);
-      window.open(res.whatsapp_url, "_blank");
-      dispatch({ type: "CLEAR" });
-      close();
-    } catch {
-      // Fallback: build WhatsApp link client-side
-      const PHONE = "254742471824";
-      let msg = `🌿 *65° Coffee Roastery — New Order*\n\n`;
-      msg += `👤 ${form.name}\n📍 ${form.city}\n📱 ${form.phone}\n\n☕ *Order:*\n`;
-      items.forEach((i) => {
-        msg += `  • ${i.name} × ${i.quantity} — KES ${(i.price * i.quantity).toFixed(0)}\n`;
-      });
-      msg += `\n💰 *Total: KES ${total.toFixed(0)}*`;
-      if (form.notes) msg += `\n📝 ${form.notes}`;
-      window.open(
-        `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,
-        "_blank",
-      );
-      dispatch({ type: "CLEAR" });
-      close();
-    }
+  const handleSent = () => {
+    dispatch({ type: "CLEAR" });
+    close();
   };
 
   return (
@@ -185,8 +170,8 @@ export default function CartDrawer() {
           </>
         )}
 
-        {(step === "form" || step === "sending") && (
-          <form className="checkout-form" onSubmit={handleCheckout}>
+        {step === "form" && (
+          <form className="checkout-form" onSubmit={handlePrepareOrder}>
             <div className="form-group">
               <label>Full Name *</label>
               <input
@@ -203,7 +188,7 @@ export default function CartDrawer() {
                 name="phone"
                 value={form.phone}
                 onChange={handleFormChange}
-                placeholder="+254 742 471 824"
+                placeholder="+254 7XX XXX XXX"
                 required
               />
             </div>
@@ -245,29 +230,48 @@ export default function CartDrawer() {
               >
                 ← Back to Cart
               </button>
-              <button
-                type="submit"
-                className="whatsapp-btn"
-                disabled={step === "sending"}
-              >
-                {step === "sending" ? (
-                  "Opening WhatsApp..."
-                ) : (
-                  <>
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                    </svg>
-                    Send Order via WhatsApp
-                  </>
-                )}
+              <button type="submit" className="whatsapp-btn">
+                Confirm Order →
               </button>
             </div>
           </form>
+        )}
+
+        {step === "ready" && (
+          <div className="cart-ready">
+            <div className="ready-icon">✓</div>
+            <h3>Your order is ready!</h3>
+            <p>
+              Tap below to open WhatsApp — your order is pre-filled and ready to
+              send.
+            </p>
+            <div className="cart-footer">
+              <a
+                href={whatsappUrl}
+                className="whatsapp-btn"
+                target="_blank"
+                rel="noreferrer"
+                onClick={handleSent}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                  textDecoration: "none",
+                }}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                </svg>
+                Open WhatsApp & Send Order
+              </a>
+            </div>
+          </div>
         )}
       </div>
     </>
