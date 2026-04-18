@@ -26,7 +26,7 @@ export default function CartDrawer() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const buildWhatsappUrl = () => {
-    const PHONE = "254700000000"; // Replace with your real number
+    const PHONE = "254742471824";
     let msg = `🌿 *65° Coffee Roastery — New Order*\n\n`;
     msg += `👤 ${form.name}\n📍 ${form.city}\n📱 ${form.phone}\n\n☕ *Order:*\n`;
     items.forEach((i) => {
