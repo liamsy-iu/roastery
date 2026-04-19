@@ -177,6 +177,10 @@
 [data-theme="dark"] .product-card:hover {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
 }
+[data-theme="dark"] .product-badge {
+  background: #1c1008;
+  color: #e8b86d;
+}
 [data-theme="dark"] .product-footer {
   border-top-color: var(--cream-dark);
 }
