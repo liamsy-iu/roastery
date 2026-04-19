@@ -2,7 +2,7 @@
   {
     "id": 1001,
     "order_number": "ORD-1001",
-    "status": "new",
+    "status": "delivered",
     "customer_name": "Abdullahi Ismail",
     "customer_phone": "+966573818074",
     "customer_city": "Al Madinah Al Munawwarah",
@@ -17,7 +17,7 @@
     ],
     "total": 1600.0,
     "created_at": "2026-04-19T08:17:49.143727",
-    "updated_at": "2026-04-19T08:17:49.143741"
+    "updated_at": "2026-04-19T08:31:56.475428"
   },
   {
     "id": 1002,
@@ -58,5 +58,45 @@
     "total": 1600.0,
     "created_at": "2026-04-19T08:19:16.807676",
     "updated_at": "2026-04-19T08:19:16.807689"
+  },
+  {
+    "id": 1004,
+    "order_number": "ORD-1004",
+    "status": "new",
+    "customer_name": "Abdullahi Ismail",
+    "customer_phone": "+966573818074",
+    "customer_city": "Al Madinah Al Munawwarah",
+    "notes": "",
+    "items": [
+      {
+        "product_id": 1,
+        "product_name": "Kenya AA Kiambu",
+        "quantity": 1,
+        "price": 1800.0
+      }
+    ],
+    "total": 1800.0,
+    "created_at": "2026-04-19T08:23:21.500085",
+    "updated_at": "2026-04-19T08:23:21.500282"
+  },
+  {
+    "id": 1005,
+    "order_number": "ORD-1005",
+    "status": "new",
+    "customer_name": "Abdullahi Ismail",
+    "customer_phone": "+966573818074",
+    "customer_city": "Al Madinah Al Munawwarah",
+    "notes": "",
+    "items": [
+      {
+        "product_id": 1,
+        "product_name": "Kenya AA Kiambu",
+        "quantity": 1,
+        "price": 1800.0
+      }
+    ],
+    "total": 1800.0,
+    "created_at": "2026-04-19T08:28:45.514503",
+    "updated_at": "2026-04-19T08:28:45.514522"
   }
 ]

@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import "./CartDrawer.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const PHONE = "+254742471824";
+const PHONE = "254742471824";
 
 export default function CartDrawer() {
   const { open, items, total, count, dispatch } = useCart();
