@@ -130,12 +130,29 @@
 }
 
 @keyframes scroll-pulse {
-  0%, 100% { transform: scaleY(1); opacity: 0.3; }
-  50% { transform: scaleY(0.5); opacity: 0.8; }
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scaleY(0.5);
+    opacity: 0.8;
+  }
 }
 
 @media (max-width: 768px) {
-  .hero-stats { gap: 20px; }
-  .stat-num { font-size: 28px; }
-  .hero-headline { font-size: 44px; }
+  .hero-stats {
+    gap: 20px;
+  }
+  .stat-num {
+    font-size: 28px;
+  }
+  .hero-headline {
+    font-size: 44px;
+  }
+}
+
+[data-theme="dark"] .hero-headline {
+  --cream: #f5efe0;
 }

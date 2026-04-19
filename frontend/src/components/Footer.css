@@ -128,3 +128,11 @@
     text-align: center;
   }
 }
+
+/* Override dark mode - keep light mode colors */
+[data-theme="dark"] .footer {
+  --brown-dark: #352718;
+  --cream: #f5efe0;
+  --gold: #c8922a;
+  --gold-light: #e8b86d;
+}
