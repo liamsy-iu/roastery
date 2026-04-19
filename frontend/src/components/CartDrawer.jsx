@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import "./CartDrawer.css";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const PHONE = "254742471824";
+
 export default function CartDrawer() {
   const { open, items, total, count, dispatch } = useCart();
-  const [step, setStep] = useState("cart"); // cart | form | ready
+  const [step, setStep] = useState("cart"); // cart | form | saving | ready
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -25,26 +28,53 @@ export default function CartDrawer() {
   const handleFormChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const buildWhatsappUrl = () => {
-    const PHONE = "254742471824";
-    let msg = `🌿 *65° Coffee Roastery — New Order*\n\n`;
-    msg += `👤 ${form.name}\n📍 ${form.city}\n📱 ${form.phone}\n\n☕ *Order:*\n`;
+  const buildFallbackUrl = () => {
+    let msg = `*65 Degrees Coffee Roastery - New Order*\n\n`;
+    msg += `Name: ${form.name}\nCity: ${form.city}\nPhone: ${form.phone}\n\nOrder:\n`;
     items.forEach((i) => {
-      msg += `  • ${i.name} × ${i.quantity} — KES ${(i.price * i.quantity).toFixed(0)}\n`;
+      msg += `- ${i.name} x${i.quantity} - KES ${(i.price * i.quantity).toFixed(0)}\n`;
     });
-    msg += `\n💰 *Total: KES ${total.toFixed(0)}*`;
-    if (form.notes) msg += `\n📝 ${form.notes}`;
+    msg += `\nTotal: KES ${total.toFixed(0)}`;
+    if (form.notes) msg += `\nNotes: ${form.notes}`;
     return `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
   };
 
-  const handlePrepareOrder = (e) => {
+  const handlePrepareOrder = async (e) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.city) {
       setError("Please fill in all required fields.");
       return;
     }
     setError("");
-    setWhatsappUrl(buildWhatsappUrl());
+    setStep("saving");
+
+    const order = {
+      items: items.map((i) => ({
+        product_id: i.id,
+        product_name: i.name,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+      customer_name: form.name,
+      customer_phone: form.phone,
+      customer_city: form.city,
+      notes: form.notes || "",
+    };
+
+    try {
+      const res = await fetch(`${API}/orders/whatsapp-link`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setWhatsappUrl(data.whatsapp_url);
+    } catch {
+      // Backend unreachable - build URL client-side as fallback
+      setWhatsappUrl(buildFallbackUrl());
+    }
+
     setStep("ready");
   };
 
@@ -71,6 +101,7 @@ export default function CartDrawer() {
           </button>
         </div>
 
+        {/* ── Step 1: Cart ── */}
         {step === "cart" && (
           <>
             {items.length === 0 ? (
@@ -138,7 +169,6 @@ export default function CartDrawer() {
                     </div>
                   ))}
                 </div>
-
                 <div className="cart-footer">
                   <div className="cart-total">
                     <span>Total</span>
@@ -170,6 +200,7 @@ export default function CartDrawer() {
           </>
         )}
 
+        {/* ── Step 2: Customer form ── */}
         {step === "form" && (
           <form className="checkout-form" onSubmit={handlePrepareOrder}>
             <div className="form-group">
@@ -237,6 +268,17 @@ export default function CartDrawer() {
           </form>
         )}
 
+        {/* ── Step 2.5: Saving spinner ── */}
+        {step === "saving" && (
+          <div className="cart-ready">
+            <div className="saving-spinner" />
+            <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
+              Preparing your order...
+            </p>
+          </div>
+        )}
+
+        {/* ── Step 3: Ready — tap to open WhatsApp ── */}
         {step === "ready" && (
           <div className="cart-ready">
             <div className="ready-icon">✓</div>

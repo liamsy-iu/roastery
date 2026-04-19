@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1001,
+    "order_number": "ORD-1001",
+    "status": "new",
+    "customer_name": "Abdullahi Ismail",
+    "customer_phone": "+966573818074",
+    "customer_city": "Al Madinah Al Munawwarah",
+    "notes": "",
+    "items": [
+      {
+        "product_id": 2,
+        "product_name": "Ethiopian Yirgacheffe",
+        "quantity": 1,
+        "price": 1600.0
+      }
+    ],
+    "total": 1600.0,
+    "created_at": "2026-04-19T08:17:49.143727",
+    "updated_at": "2026-04-19T08:17:49.143741"
+  },
+  {
+    "id": 1002,
+    "order_number": "ORD-1002",
+    "status": "new",
+    "customer_name": "Abdullahi Ismail",
+    "customer_phone": "+966573818074",
+    "customer_city": "Al Madinah Al Munawwarah",
+    "notes": "",
+    "items": [
+      {
+        "product_id": 1,
+        "product_name": "Kenya AA Kiambu",
+        "quantity": 1,
+        "price": 1800.0
+      }
+    ],
+    "total": 1800.0,
+    "created_at": "2026-04-19T08:18:40.278794",
+    "updated_at": "2026-04-19T08:18:40.278812"
+  },
+  {
+    "id": 1003,
+    "order_number": "ORD-1003",
+    "status": "new",
+    "customer_name": "Abdullahi Ismail",
+    "customer_phone": "+966573818074",
+    "customer_city": "Al Madinah Al Munawwarah",
+    "notes": "",
+    "items": [
+      {
+        "product_id": 2,
+        "product_name": "Ethiopian Yirgacheffe",
+        "quantity": 1,
+        "price": 1600.0
+      }
+    ],
+    "total": 1600.0,
+    "created_at": "2026-04-19T08:19:16.807676",
+    "updated_at": "2026-04-19T08:19:16.807689"
+  }
+]
