@@ -34,7 +34,7 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 6px solid var(--white);
-  box-shadow: 0 20px 60px rgba(28,16,8,0.15);
+  box-shadow: 0 20px 60px rgba(28, 16, 8, 0.15);
 }
 
 .story-img-accent img {
@@ -109,6 +109,17 @@
     grid-template-columns: 1fr;
     gap: 60px;
   }
-  .story-text-col { padding-left: 0; }
-  .story-img-accent { right: -10px; }
+  .story-text-col {
+    padding-left: 0;
+  }
+  .story-img-accent {
+    right: -10px;
+  }
+}
+
+[data-theme="dark"] .story {
+  background: var(--bg-surface);
+}
+[data-theme="dark"] .story-img-accent {
+  border-color: var(--bg-surface);
 }

@@ -1,47 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500&display=swap");
 
+/* ── Light mode (default) ─────────────────────────────────────────────── */
 :root {
-  --cream: #F5EFE0;
-  --cream-dark: #EDE3CC;
-  --brown-dark: #1C1008;
-  --brown-mid: #3D2106;
-  --brown-warm: #6B3A1F;
-  --brown-light: #A0622A;
-  --gold: #C8922A;
-  --gold-light: #E8B86D;
-  --text-primary: #1C1008;
-  --text-secondary: #5C3D1E;
-  --text-muted: #8B6845;
-  --white: #FFFDF8;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Jost', sans-serif;
+  --cream: #f5efe0;
+  --cream-dark: #ede3cc;
+  --brown-dark: #1c1008;
+  --brown-mid: #3d2106;
+  --brown-warm: #6b3a1f;
+  --brown-light: #a0622a;
+  --gold: #c8922a;
+  --gold-light: #e8b86d;
+  --text-primary: #1c1008;
+  --text-secondary: #5c3d1e;
+  --text-muted: #8b6845;
+  --white: #fffdf8;
+
+  --bg-page: var(--cream);
+  --bg-surface: var(--white);
+  --bg-surface-alt: #f0e8d4;
+  --border-subtle: rgba(168, 120, 60, 0.15);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Jost", sans-serif;
   --radius: 4px;
   --radius-lg: 8px;
   --transition: 0.3s ease;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Dark mode ────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --cream: #2a1f14;
+  --cream-dark: #352718;
+  --brown-dark: #f5efe0;
+  --brown-mid: #e8dec8;
+  --brown-warm: #d4a96a;
+  --brown-light: #c8922a;
+  --gold: #e8b86d;
+  --gold-light: #f0cc8a;
+  --text-primary: #f5efe0;
+  --text-secondary: #c8a882;
+  --text-muted: #9a7a58;
+  --white: #1e1510;
 
-html { scroll-behavior: smooth; }
+  --bg-page: #1a1008;
+  --bg-surface: #241810;
+  --bg-surface-alt: #2a1f14;
+  --border-subtle: rgba(200, 146, 42, 0.15);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--font-body);
-  background: var(--cream);
+  background: var(--bg-page);
   color: var(--text-primary);
   font-size: 16px;
   line-height: 1.7;
   overflow-x: hidden;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display);
   line-height: 1.2;
 }
 
-a { color: inherit; text-decoration: none; }
-
-img { display: block; max-width: 100%; }
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
 button {
   font-family: var(--font-body);
   cursor: pointer;
@@ -49,7 +96,7 @@ button {
   background: none;
 }
 
-/* Utility */
+/* ── Utility ──────────────────────────────────────────────────────────── */
 .section-label {
   font-size: 11px;
   font-weight: 500;
@@ -74,9 +121,13 @@ button {
   transition: var(--transition);
   cursor: pointer;
 }
+[data-theme="dark"] .btn-primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1a1008;
+}
 .btn-primary:hover {
-  background: var(--brown-mid);
-  border-color: var(--brown-mid);
+  opacity: 0.88;
 }
 
 .btn-outline {
@@ -107,23 +158,38 @@ button {
 }
 
 @media (max-width: 768px) {
-  .container { padding: 0 20px; }
+  .container {
+    padding: 0 20px;
+  }
 }
 
-/* Animations */
+/* ── Animations ───────────────────────────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
-
 .fade-up {
   animation: fadeUp 0.7s ease forwards;
 }

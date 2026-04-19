@@ -62,7 +62,7 @@ export default function ContactSection() {
             </a>
 
             <a
-              href="mailto:hello@sixtyfivedegrees.com"
+              href="mailto:65degreescoffee@gmail.com"
               className="contact-detail"
             >
               <div className="detail-icon">
@@ -80,7 +80,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <span className="detail-label">Email</span>
-                <span className="detail-value">hello@sixtyfivedegrees.com</span>
+                <span className="detail-value">65degreescoffee@gmail.com</span>
               </div>
             </a>
 

@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "name": "Kenya AA Kiambu",
+    "category": "whole-bean",
+    "description": "Our flagship Kenyan single-origin, sourced from small farms in Kiambu County. Washed and dried on raised beds under Nairobi's highland sun.",
+    "origin": "Kiambu, Kenya",
+    "flavor_notes": [
+      "Blackcurrant",
+      "Brown sugar",
+      "Bright citrus"
+    ],
+    "price": 1800.0,
+    "weight": "250g",
+    "image": "http://localhost:8000/images/9802d8bbb2f84771a2427bbac02ed8c3.jpg",
+    "badge": "Single Origin",
+    "in_stock": true
+  },
+  {
+    "id": 3,
+    "name": "65\u00b0 Espresso Blend",
+    "category": "whole-bean",
+    "description": "Our signature house blend, roasted to bring out rich body and smooth crema. The everyday cup, perfected.",
+    "origin": "East Africa",
+    "flavor_notes": [
+      "Hazelnut",
+      "Caramel",
+      "Dark cocoa"
+    ],
+    "price": 1400.0,
+    "weight": "250g",
+    "image": "http://localhost:8000/images/036b75e0e5b241b5a588e1df7d126df5.jpg",
+    "badge": "House Blend",
+    "in_stock": true
+  },
+  {
+    "id": 5,
+    "name": "Kenya Nyeri AB",
+    "category": "ground",
+    "description": "Medium-coarse ground ideal for French press and Chemex. Grown on the slopes of Mt. Kenya in Nyeri County.",
+    "origin": "Nyeri, Kenya",
+    "flavor_notes": [
+      "Tomato",
+      "Grapefruit",
+      "Dark berry"
+    ],
+    "price": 1300.0,
+    "weight": "250g",
+    "image": "http://localhost:8000/images/458332e9aeb54c1e9050f23201df9605.jpg",
+    "badge": null,
+    "in_stock": true
+  },
+  {
+    "id": 6,
+    "name": "The Explorer Box",
+    "category": "subscription",
+    "description": "Every month, two new single-origin coffees chosen by our head roaster. Whole bean. Free delivery. Cancel anytime.",
+    "origin": "Rotating \u2014 12+ countries/year",
+    "flavor_notes": [
+      "Varies monthly",
+      "Curated",
+      "Surprising"
+    ],
+    "price": 2800.0,
+    "weight": "2 \u00d7 250g",
+    "image": "http://localhost:8000/images/92e525448e704ba29489eb4f19a6d46e.png",
+    "badge": "Monthly",
+    "in_stock": true
+  },
+  {
+    "id": 7,
+    "name": "The Roaster's Pick",
+    "category": "subscription",
+    "description": "One exceptional micro-lot per month, hand-selected from East African auctions worldwide.",
+    "origin": "East Africa & Beyond",
+    "flavor_notes": [
+      "Exclusive lots",
+      "Limited quantity",
+      "Premium"
+    ],
+    "price": 4200.0,
+    "weight": "250g",
+    "image": "http://localhost:8000/images/5d27c3edee9c4a16821c951459ef75df.jpg",
+    "badge": "Limited",
+    "in_stock": true
+  }
+]

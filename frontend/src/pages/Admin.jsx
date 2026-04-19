@@ -134,6 +134,7 @@ export default function Admin() {
   const [form, setForm]                       = useState(EMPTY_FORM);
   const [editId, setEditId]                   = useState(null);
   const [saving, setSaving]                   = useState(false);
+  const [uploading, setUploading]             = useState(false);
   const [deleteConfirm, setDeleteConfirm]     = useState(null);
 
   const [orders, setOrders]                         = useState([]);
@@ -192,6 +193,30 @@ export default function Admin() {
       if (!res.ok) throw new Error();
       showToast("Order deleted."); setDeleteOrderConfirm(null); fetchOrders();
     } catch { showToast("Failed to delete order."); }
+  };
+
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const data = new FormData();
+    data.append("file", file);
+    try {
+      const res = await fetch(`${API}/admin/upload-image`, {
+        method: "POST",
+        headers: { Authorization: "Basic " + btoa(`${creds.user}:${creds.pass}`) },
+        body: data,
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const json = await res.json();
+      setForm((f) => ({ ...f, image: json.url }));
+      showToast("Image uploaded!");
+    } catch {
+      showToast("Image upload failed. Try a URL instead.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const openAdd  = () => { setForm(EMPTY_FORM); setEditId(null); setModal("add"); };
@@ -563,16 +588,26 @@ export default function Admin() {
                   <label>Badge <span className="admin-field-hint">(optional)</span></label>
                   <input name="badge" value={form.badge} onChange={handleFormChange} placeholder="Staff Pick, New, Limited..." />
                 </div>
-                <div className="admin-field">
-                  <label>Image URL *</label>
-                  <input name="image" value={form.image} onChange={handleFormChange} placeholder="https://..." required />
-                </div>
-                {form.image && (
-                  <div className="admin-field span-2">
-                    <label>Preview</label>
-                    <img src={form.image} alt="preview" className="admin-img-preview" onError={(e) => e.target.style.display = "none"} />
+                <div className="admin-field span-2">
+                  <label>Product Image</label>
+                  <div className="admin-image-upload-wrap">
+                    <label className={`admin-upload-btn ${uploading ? "uploading" : ""}`}>
+                      {uploading ? "Uploading..." : "📁 Upload from device"}
+                      <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageUpload} disabled={uploading} style={{ display: "none" }} />
+                    </label>
+                    <span className="admin-upload-or">or</span>
+                    <input
+                      name="image"
+                      value={form.image}
+                      onChange={handleFormChange}
+                      placeholder="Paste image URL (https://...)"
+                      className="admin-upload-url-input"
+                    />
                   </div>
-                )}
+                  {form.image && (
+                    <img src={form.image} alt="preview" className="admin-img-preview" style={{ marginTop: 10 }} onError={(e) => e.target.style.display = "none"} />
+                  )}
+                </div>
                 <div className="admin-field span-2">
                   <label className="admin-checkbox-label">
                     <input type="checkbox" name="in_stock" checked={form.in_stock} onChange={handleFormChange} />

@@ -3,7 +3,9 @@
   border: 1px solid rgba(168, 120, 60, 0.12);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -166,4 +168,33 @@
 .add-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+[data-theme="dark"] .product-card {
+  background: var(--bg-surface);
+  border-color: rgba(200, 146, 42, 0.12);
+}
+[data-theme="dark"] .product-card:hover {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .product-footer {
+  border-top-color: var(--cream-dark);
+}
+[data-theme="dark"] .note-tag {
+  background: rgba(200, 146, 42, 0.1);
+  border-color: rgba(200, 146, 42, 0.15);
+  color: var(--gold-light);
+}
+[data-theme="dark"] .add-btn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1a1008;
+}
+[data-theme="dark"] .add-btn:hover:not(:disabled) {
+  background: var(--gold-light);
+}
+[data-theme="dark"] .add-btn.added {
+  background: #27ae60;
+  border-color: #27ae60;
+  color: white;
 }

@@ -1,13 +1,18 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
-import json, os, secrets, urllib.parse
+import json, os, secrets, urllib.parse, shutil, uuid
 from datetime import datetime
 
-app = FastAPI(title="65° Coffee Roastery API", root_path="")
+app = FastAPI(title="65° Coffee Roastery API")
 security = HTTPBasic()
+
+# --- Static file serving for uploaded images ---
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +21,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve uploaded images at /images/filename
+app.mount("/images", StaticFiles(directory=UPLOAD_DIR), name="images")
 
 # --- Admin credentials ---
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
@@ -260,3 +268,32 @@ def admin_delete_order(order_id: int, username: str = Depends(require_admin)):
         raise HTTPException(status_code=404, detail="Order not found")
     save_orders(new_list)
     return {"success": True, "deleted_id": order_id}
+
+# --- Admin: Image Upload ---
+ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_SIZE_MB = 5
+
+@app.post("/admin/upload-image")
+async def upload_image(
+    file: UploadFile = File(...),
+    username: str = Depends(require_admin)
+):
+    # Validate type
+    if file.content_type not in ALLOWED_TYPES:
+        raise HTTPException(status_code=400, detail="Only JPEG, PNG, and WebP images are allowed.")
+
+    # Read and check size
+    contents = await file.read()
+    if len(contents) > MAX_SIZE_MB * 1024 * 1024:
+        raise HTTPException(status_code=400, detail=f"Image must be under {MAX_SIZE_MB}MB.")
+
+    # Save with unique filename
+    ext = file.filename.rsplit(".", 1)[-1].lower()
+    filename = f"{uuid.uuid4().hex}.{ext}"
+    filepath = os.path.join(UPLOAD_DIR, filename)
+    with open(filepath, "wb") as f:
+        f.write(contents)
+
+    # Return the public URL
+    backend_url = os.environ.get("BACKEND_URL", "http://localhost:8000")
+    return {"url": f"{backend_url}/images/{filename}", "filename": filename}

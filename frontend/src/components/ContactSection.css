@@ -45,7 +45,9 @@
   border: 1px solid rgba(168, 120, 60, 0.12);
   border-radius: var(--radius-lg);
   background: var(--white);
-  transition: border-color 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
 }
 
 .contact-detail:hover {
@@ -189,4 +191,26 @@
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+
+[data-theme="dark"] .contact {
+  background: var(--bg-page);
+}
+[data-theme="dark"] .contact-detail {
+  background: var(--bg-surface);
+  border-color: rgba(200, 146, 42, 0.12);
+}
+[data-theme="dark"] .contact-form-wrap {
+  background: var(--bg-surface);
+  border-color: rgba(200, 146, 42, 0.12);
+}
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form textarea {
+  background: var(--bg-page);
+  border-color: var(--cream-dark);
+  color: var(--text-primary);
+}
+[data-theme="dark"] .contact-form input:focus,
+[data-theme="dark"] .contact-form textarea:focus {
+  border-color: var(--gold);
 }
