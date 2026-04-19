@@ -13,7 +13,7 @@ export default function OurStory() {
           </div>
           <div className="story-img-accent">
             <img
-              src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?w=400&q=80"
+              src="https://res.cloudinary.com/dovzuavd7/image/upload/v1776609183/logo_y3g7bv.png"
               alt="Coffee beans close up"
             />
           </div>

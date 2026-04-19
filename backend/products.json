@@ -12,7 +12,7 @@
     ],
     "price": 1800.0,
     "weight": "250g",
-    "image": "http://localhost:8000/images/9802d8bbb2f84771a2427bbac02ed8c3.jpg",
+    "image": "https://res.cloudinary.com/dovzuavd7/image/upload/q_auto/f_auto/v1776609068/IMG_0229_qbzlv6.jpg",
     "badge": "Single Origin",
     "in_stock": true
   },
@@ -29,7 +29,7 @@
     ],
     "price": 1400.0,
     "weight": "250g",
-    "image": "http://localhost:8000/images/036b75e0e5b241b5a588e1df7d126df5.jpg",
+    "image": "https://res.cloudinary.com/dovzuavd7/image/upload/q_auto/f_auto/v1776608829/IMG_0224_y76oy8.jpg",
     "badge": "House Blend",
     "in_stock": true
   },
@@ -46,7 +46,7 @@
     ],
     "price": 1300.0,
     "weight": "250g",
-    "image": "http://localhost:8000/images/458332e9aeb54c1e9050f23201df9605.jpg",
+    "image": "https://res.cloudinary.com/dovzuavd7/image/upload/q_auto/f_auto/v1776609100/IMG_0232_ikhs22.jpg",
     "badge": null,
     "in_stock": true
   },
@@ -63,7 +63,7 @@
     ],
     "price": 2800.0,
     "weight": "2 \u00d7 250g",
-    "image": "http://localhost:8000/images/92e525448e704ba29489eb4f19a6d46e.png",
+    "image": "https://res.cloudinary.com/dovzuavd7/image/upload/q_auto/f_auto/v1776609183/logo_y3g7bv.png",
     "badge": "Monthly",
     "in_stock": true
   },
@@ -80,7 +80,7 @@
     ],
     "price": 4200.0,
     "weight": "250g",
-    "image": "http://localhost:8000/images/5d27c3edee9c4a16821c951459ef75df.jpg",
+    "image": "https://res.cloudinary.com/dovzuavd7/image/upload/q_auto/f_auto/v1776609169/hero-bg_fwilqs.jpg",
     "badge": "Limited",
     "in_stock": true
   }
