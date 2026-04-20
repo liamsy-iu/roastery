@@ -98,11 +98,6 @@ export default function Wholesale() {
     }
   };
 
-  const waMessage = encodeURIComponent(
-    "Hi 65° Roastery! I'm interested in your wholesale programme. Please share more details.",
-  );
-  const waUrl = `https://wa.me/254742471824?text=${waMessage}`;
-
   return (
     <div className="wholesale">
       <div className="container">
