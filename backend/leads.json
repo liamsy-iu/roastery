@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "name": "Liamsy",
+    "business_name": "SHAMI motors",
+    "phone": "+254722510736",
+    "city": "Mombasa",
+    "volume": "50 kg+ / month",
+    "message": "",
+    "status": "contacted",
+    "created_at": "2026-04-20T18:52:00.698560"
+  },
+  {
+    "id": 2,
+    "name": "Liamsy",
+    "business_name": "Cafe",
+    "phone": "+966573818074",
+    "city": "NBO",
+    "volume": "25 \u2013 50 kg / month",
+    "message": "",
+    "status": "new",
+    "created_at": "2026-04-20T19:14:58.333419"
+  }
+]
