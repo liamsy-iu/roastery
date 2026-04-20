@@ -183,6 +183,33 @@
   max-width: 320px;
 }
 
+@media (max-width: 600px) {
+  .contact {
+    padding: 72px 0;
+  }
+  .contact-inner {
+    gap: 40px;
+  }
+  .contact-body {
+    margin-bottom: 24px;
+  }
+  .contact-form-wrap {
+    padding: 24px 20px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .contact-detail {
+    padding: 14px 16px;
+  }
+  .detail-value {
+    font-size: 13px;
+  }
+  .form-success {
+    padding: 28px 16px;
+  }
+}
+
 @media (max-width: 900px) {
   .contact-inner {
     grid-template-columns: 1fr;

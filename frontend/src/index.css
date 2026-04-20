@@ -164,6 +164,13 @@ button {
   }
 }
 
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-outline {
+    padding: 12px 24px;
+    font-size: 12px;
+  }
+}
 /* ── Animations ───────────────────────────────────────────────────────── */
 @keyframes fadeUp {
   from {

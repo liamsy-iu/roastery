@@ -82,6 +82,29 @@
   animation: spin 0.8s linear infinite;
 }
 
+@media (max-width: 600px) {
+  .shop {
+    padding: 72px 0;
+  }
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .shop-filters {
+    gap: 6px;
+  }
+  .filter-btn {
+    font-size: 11px;
+    padding: 7px 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .shop-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

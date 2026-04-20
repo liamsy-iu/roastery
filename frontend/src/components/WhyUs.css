@@ -115,8 +115,24 @@
   .whyus-grid {
     grid-template-columns: 1fr;
   }
+  .whyus {
+    padding: 72px 0;
+  }
+  .whyus-card {
+    padding: 28px 20px;
+  }
+  .whyus-banner {
+    height: auto;
+    min-height: 280px;
+  }
   .whyus-banner-overlay {
-    padding: 30px;
+    position: relative;
+    background: rgba(28, 16, 8, 0.82);
+    padding: 28px 24px;
+    max-width: 100%;
+  }
+  .whyus-banner blockquote {
+    font-size: 18px;
   }
 }
 

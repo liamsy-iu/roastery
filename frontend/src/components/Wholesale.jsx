@@ -1,4 +1,7 @@
+import { useState } from "react";
 import "./Wholesale.css";
+
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const TIERS = [
   {
@@ -50,7 +53,51 @@ const CLIENTS = [
   { icon: "🛒", label: "Retailers & Delis" },
 ];
 
+const VOLUMES = [
+  "5 – 10 kg / month",
+  "11 – 25 kg / month",
+  "25 – 50 kg / month",
+  "50 kg+ / month",
+];
+
+const EMPTY_FORM = {
+  name: "",
+  business_name: "",
+  phone: "",
+  city: "",
+  volume: "",
+  message: "",
+};
+
 export default function Wholesale() {
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState("idle");
+  const [waUrl, setWaUrl] = useState("");
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch(`${API}/wholesale/enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setWaUrl(data.whatsapp_url);
+      setStatus("sent");
+    } catch {
+      const msg = `*65° Wholesale Enquiry*\n\nName: ${form.name}\nBusiness: ${form.business_name}\nPhone: ${form.phone}\nCity: ${form.city}\nVolume: ${form.volume}`;
+      setWaUrl(`https://wa.me/254742471824?text=${encodeURIComponent(msg)}`);
+      setStatus("sent");
+    }
+  };
+
   const waMessage = encodeURIComponent(
     "Hi 65° Roastery! I'm interested in your wholesale programme. Please share more details.",
   );
@@ -120,17 +167,136 @@ export default function Wholesale() {
                   </li>
                 ))}
               </ul>
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noreferrer"
+              <button
                 className={`tier-cta ${tier.highlight ? "tier-cta-primary" : "tier-cta-outline"}`}
+                onClick={() => setShowForm(true)}
               >
                 Get Started
-              </a>
+              </button>
             </div>
           ))}
         </div>
+
+        {showForm && (
+          <div className="wholesale-form-wrap">
+            {status === "sent" ? (
+              <div className="wholesale-form-success">
+                <div className="ws-success-icon">✓</div>
+                <h3>Enquiry received!</h3>
+                <p>
+                  We've saved your details and will be in touch within 24 hours.
+                </p>
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="wholesale-banner-btn"
+                >
+                  WhatsApp Us Now
+                </a>
+                <button
+                  className="ws-reset-btn"
+                  onClick={() => {
+                    setStatus("idle");
+                    setForm(EMPTY_FORM);
+                    setShowForm(false);
+                  }}
+                >
+                  Submit another enquiry
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="wholesale-form-header">
+                  <h3>Get a wholesale quote</h3>
+                  <button
+                    className="ws-close-btn"
+                    onClick={() => setShowForm(false)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <form onSubmit={handleSubmit} className="wholesale-form">
+                  <div className="ws-form-grid">
+                    <div className="ws-field">
+                      <label>Your Name *</label>
+                      <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Full name"
+                        required
+                      />
+                    </div>
+                    <div className="ws-field">
+                      <label>Business Name *</label>
+                      <input
+                        name="business_name"
+                        value={form.business_name}
+                        onChange={handleChange}
+                        placeholder="Café / Restaurant / Office..."
+                        required
+                      />
+                    </div>
+                    <div className="ws-field">
+                      <label>Phone Number *</label>
+                      <input
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        placeholder="+254 7XX XXX XXX"
+                        required
+                      />
+                    </div>
+                    <div className="ws-field">
+                      <label>City *</label>
+                      <input
+                        name="city"
+                        value={form.city}
+                        onChange={handleChange}
+                        placeholder="Nairobi, Mombasa..."
+                        required
+                      />
+                    </div>
+                    <div className="ws-field ws-span-2">
+                      <label>Monthly Volume *</label>
+                      <select
+                        name="volume"
+                        value={form.volume}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">Select volume...</option>
+                        {VOLUMES.map((v) => (
+                          <option key={v} value={v}>
+                            {v}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="ws-field ws-span-2">
+                      <label>Additional notes (optional)</label>
+                      <textarea
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder="Preferred origins, grind requirements..."
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="ws-submit-btn"
+                    disabled={status === "sending"}
+                  >
+                    {status === "sending" ? "Sending..." : "Submit Enquiry"}
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Bottom banner */}
         <div className="wholesale-banner">

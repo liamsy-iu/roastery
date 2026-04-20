@@ -11,17 +11,33 @@ export default function CartDrawer() {
   const [form, setForm] = useState({
     name: "",
     phone: "",
+    email: "",
     city: "",
     notes: "",
   });
   const [error, setError] = useState("");
   const [whatsappUrl, setWhatsappUrl] = useState("");
 
+  const [codeInput, setCodeInput] = useState("");
+  const [discount, setDiscount] = useState(null);
+  const [codeError, setCodeError] = useState("");
+  const [codeLoading, setCodeLoading] = useState(false);
+
+  const discountAmount = discount
+    ? discount.type === "percent"
+      ? Math.round((total * discount.value) / 100)
+      : Math.min(discount.value, total)
+    : 0;
+  const finalTotal = total - discountAmount;
+
   const close = () => {
     dispatch({ type: "CLOSE" });
     setTimeout(() => {
       setStep("cart");
       setWhatsappUrl("");
+      setDiscount(null);
+      setCodeInput("");
+      setCodeError("");
     }, 300);
   };
 
@@ -37,6 +53,36 @@ export default function CartDrawer() {
     msg += `\nTotal: KES ${total.toFixed(0)}`;
     if (form.notes) msg += `\nNotes: ${form.notes}`;
     return `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+  };
+
+  const handleApplyCode = async () => {
+    if (!codeInput.trim()) return;
+    setCodeLoading(true);
+    setCodeError("");
+    try {
+      const res = await fetch(`${API}/discounts/validate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: codeInput.trim() }),
+      });
+      if (!res.ok) {
+        setCodeError("Invalid or expired code.");
+        setDiscount(null);
+      } else {
+        const d = await res.json();
+        setDiscount(d);
+      }
+    } catch {
+      setCodeError("Could not validate code. Try again.");
+    } finally {
+      setCodeLoading(false);
+    }
+  };
+
+  const removeDiscount = () => {
+    setDiscount(null);
+    setCodeInput("");
+    setCodeError("");
   };
 
   const handlePrepareOrder = async (e) => {
@@ -57,12 +103,16 @@ export default function CartDrawer() {
       })),
       customer_name: form.name,
       customer_phone: form.phone,
+      customer_email: form.email || "",
       customer_city: form.city,
       notes: form.notes || "",
+      discount_code: discount?.code || "",
+      discount_value: discount?.value || 0,
+      discount_type: discount?.type || "",
     };
 
     try {
-      const res = await fetch(`${API}/orders/whatsapp-link`, {
+      const res = await fetch(`${API}/orders/whatsapp-link-v2`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
@@ -169,31 +219,65 @@ export default function CartDrawer() {
                     </div>
                   ))}
                 </div>
+                <div className="discount-section">
+                  {!discount ? (
+                    <div className="discount-row">
+                      <input
+                        className="discount-input"
+                        value={codeInput}
+                        onChange={(e) =>
+                          setCodeInput(e.target.value.toUpperCase())
+                        }
+                        placeholder="Discount code"
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && handleApplyCode()
+                        }
+                      />
+                      <button
+                        className="discount-apply-btn"
+                        onClick={handleApplyCode}
+                        disabled={codeLoading}
+                      >
+                        {codeLoading ? "..." : "Apply"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="discount-applied">
+                      <span>
+                        🏷️ <strong>{discount.code}</strong> —{" "}
+                        {discount.type === "percent"
+                          ? `${discount.value}% off`
+                          : `KES ${discount.value} off`}
+                      </span>
+                      <button
+                        onClick={removeDiscount}
+                        className="discount-remove"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                  {codeError && <p className="discount-error">{codeError}</p>}
+                </div>
                 <div className="cart-footer">
+                  {discountAmount > 0 && (
+                    <div className="cart-total" style={{ opacity: 0.6 }}>
+                      <span>Subtotal</span>
+                      <span>KES {total.toFixed(0)}</span>
+                    </div>
+                  )}
+                  {discountAmount > 0 && (
+                    <div className="cart-total" style={{ color: "#27ae60" }}>
+                      <span>Discount</span>
+                      <span>− KES {discountAmount.toFixed(0)}</span>
+                    </div>
+                  )}
                   <div className="cart-total">
                     <span>Total</span>
-                    <span className="total-amount">KES {total.toFixed(0)}</span>
+                    <span className="total-amount">
+                      KES {finalTotal.toFixed(0)}
+                    </span>
                   </div>
-                  <p className="cart-shipping-note">
-                    🚚 Free delivery across Kenya
-                  </p>
-                  <button
-                    className="btn-primary"
-                    style={{ width: "100%", justifyContent: "center" }}
-                    onClick={() => setStep("form")}
-                  >
-                    Proceed to Order
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </button>
                 </div>
               </>
             )}
@@ -221,6 +305,27 @@ export default function CartDrawer() {
                 onChange={handleFormChange}
                 placeholder="+254 7XX XXX XXX"
                 required
+              />
+            </div>
+            <div className="form-group">
+              <label>
+                Email{" "}
+                <span
+                  style={{
+                    fontWeight: 300,
+                    textTransform: "none",
+                    letterSpacing: 0,
+                  }}
+                >
+                  (for confirmation)
+                </span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleFormChange}
+                placeholder="you@email.com"
               />
             </div>
             <div className="form-group">

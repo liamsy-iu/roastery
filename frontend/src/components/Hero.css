@@ -129,18 +129,6 @@
   animation: scroll-pulse 2s ease infinite;
 }
 
-@keyframes scroll-pulse {
-  0%,
-  100% {
-    transform: scaleY(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scaleY(0.5);
-    opacity: 0.8;
-  }
-}
-
 @media (max-width: 768px) {
   .hero-stats {
     gap: 20px;
@@ -150,6 +138,57 @@
   }
   .hero-headline {
     font-size: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 100svh;
+  }
+  .hero-content {
+    gap: 32px;
+    padding-top: 80px;
+  }
+  .hero-headline {
+    font-size: 38px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-stats {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .stat-num {
+    font-size: 24px;
+  }
+  .stat-divider {
+    display: none;
+  }
+  .hero-scroll-hint {
+    display: none;
+  }
+}
+
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scaleY(0.5);
+    opacity: 0.8;
   }
 }
 

@@ -104,6 +104,33 @@
   font-weight: 300;
 }
 
+@media (max-width: 600px) {
+  .story {
+    padding: 72px 0 80px;
+  }
+  .story-img-accent {
+    position: static;
+    width: 60%;
+    margin: -30px auto 0;
+    border-width: 4px;
+  }
+  .story-image-col {
+    overflow: visible;
+  }
+  .story-heading {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .story-body {
+    font-size: 15px;
+  }
+  .story-values {
+    gap: 18px;
+    margin-top: 28px;
+    padding-top: 28px;
+  }
+}
+
 @media (max-width: 900px) {
   .story-inner {
     grid-template-columns: 1fr;
