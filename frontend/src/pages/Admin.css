@@ -37,6 +37,10 @@
   color: var(--brown-dark);
 }
 
+[data-theme="dark"] .admin-header-left .admin-logo-deg {
+  color: #1a1008;
+}
+
 .admin-logo-label {
   font-size: 11px;
   font-weight: 500;
@@ -85,6 +89,10 @@
   font-family: var(--font-body);
 }
 
+[data-theme="dark"] .admin-wrap {
+  background: #1a1008;
+}
+
 .admin-header {
   background: var(--brown-dark);
   padding: 0 24px;
@@ -96,6 +104,11 @@
   top: 0;
   z-index: 10;
   gap: 12px;
+}
+
+[data-theme="dark"] .admin-header {
+  background: var(--gold);
+  border-bottom-color: rgba(200, 146, 42, 0.12);
 }
 
 .admin-header-left {
@@ -137,8 +150,16 @@
   white-space: nowrap;
 }
 
+[data-theme="dark"] .admin-tabs button {
+  color: #1a1008;
+}
+
 .admin-tabs button:hover {
   color: rgba(245, 239, 224, 0.8);
+}
+
+[dark-theme="dark"] .admin-tabs button:hover {
+  background-color: #1a1008;
 }
 .admin-tabs button.active {
   background: rgba(245, 239, 224, 0.1);
@@ -197,6 +218,10 @@
   border-color: var(--brown-dark);
 }
 
+[data-theme="dark"] .admin-stat-card.revenue {
+  background: var(--gold);
+}
+
 .admin-stat-card .stat-label {
   font-size: 10px;
   font-weight: 500;
@@ -207,6 +232,10 @@
 
 .admin-stat-card.revenue .stat-label {
   color: rgba(245, 239, 224, 0.5);
+}
+
+[data-theme="dark"] .admin-stat-card.revenue .stat-label {
+  color: #1a1008;
 }
 
 .admin-stat-card .stat-value {
@@ -220,6 +249,10 @@
 .admin-stat-card.revenue .stat-value {
   color: var(--gold-light);
   font-size: 18px;
+}
+
+[data-theme="dark"] .admin-stat-card.revenue .stat-value {
+  color: #1a1008;
 }
 
 /* ---- Toolbar ---- */
@@ -668,6 +701,11 @@
 .admin-btn-ghost:hover {
   color: var(--cream);
   border-color: rgba(245, 239, 224, 0.5);
+}
+
+[data-theme="dark"] .admin-btn-ghost {
+  color: #1a1008;
+  border-color: rgba(28, 16, 8, 0.2);
 }
 
 .admin-btn-ghost-dark {
