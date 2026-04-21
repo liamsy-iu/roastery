@@ -441,7 +441,194 @@ export default function Admin() {
     }
   };
 
-  const handlePrint = () => window.print();
+  const handlePrint = (order) => {
+    const logoUrl = window.location.origin + "/logo.png";
+    const itemsHtml = order.items
+      .map(
+        (item) => `
+    <tr>
+      <td>${item.product_name}</td>
+      <td style="text-align:center">${item.quantity}</td>
+      <td style="text-align:right">KES ${(item.price * item.quantity).toLocaleString()}</td>
+    </tr>
+  `,
+      )
+      .join("");
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice ${order.order_number}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @page { size: A4 portrait; margin: 15mm; }
+    body {
+      font-family: Georgia, serif;
+      color: #1C1008;
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 32px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #1C1008;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .logo { height: 72px; width: auto; object-fit: contain; }
+    .brand-addr { font-size: 11px; color: #8B6845; margin-top: 8px; line-height: 1.7; }
+    .invoice-title {
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .meta-row {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .meta-label { color: #8B6845; min-width: 80px; }
+    .meta-value { font-weight: 600; }
+    .bill-to { margin-bottom: 24px; }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8B6845;
+      margin-bottom: 8px;
+    }
+    .customer-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .customer-detail { font-size: 12px; color: #5C3D1E; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    th {
+      background: #1C1008;
+      color: #F5EFE0;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      text-align: left;
+    }
+    th:last-child, td:last-child { text-align: right; }
+    td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #EDE3CC; color: #3D2106; }
+    .totals { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-bottom: 24px; }
+    .total-row { display: flex; gap: 40px; font-size: 12px; }
+    .total-row.grand {
+      font-size: 15px;
+      font-weight: 700;
+      border-top: 2px solid #1C1008;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+    .total-label { color: #8B6845; min-width: 70px; text-align: right; }
+    .total-value { min-width: 90px; text-align: right; }
+    .footer {
+      border-top: 1px solid #EDE3CC;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-note { font-size: 11px; color: #8B6845; }
+    .footer-brand { font-family: Georgia, serif; font-size: 18px; color: #C8922A; font-style: italic; }
+    .print-btn {
+      display: block;
+      margin: 24px auto 0;
+      padding: 12px 32px;
+      background: #1C1008;
+      color: #F5EFE0;
+      border: none;
+      font-family: Georgia, serif;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    @media print { .print-btn { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <img src="${logoUrl}" alt="65° Coffee Roastery" class="logo" />
+      <div class="brand-addr">
+        Nairobi, Kenya<br>
+        65degreescoffee@gmail.com<br>
+        +254 742 471 824
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="invoice-title">Invoice</div>
+      <div class="meta-row">
+        <span class="meta-label">Invoice No.</span>
+        <span class="meta-value">${order.order_number}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">${new Date(order.created_at).toLocaleDateString("en-KE", { day: "numeric", month: "short", year: "numeric" })}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Status</span>
+        <span class="meta-value">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bill-to">
+    <div class="section-label">Billed To</div>
+    <div class="customer-name">${order.customer_name}</div>
+    <div class="customer-detail">${order.customer_city}</div>
+    <div class="customer-detail">${order.customer_phone}</div>
+    ${order.notes ? `<div class="customer-detail" style="font-style:italic;margin-top:4px">Note: ${order.notes}</div>` : ""}
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Total</th></tr>
+    </thead>
+    <tbody>${itemsHtml}</tbody>
+  </table>
+
+  <div class="totals">
+    <div class="total-row">
+      <span class="total-label">Subtotal</span>
+      <span class="total-value">KES ${order.total.toLocaleString()}</span>
+    </div>
+    <div class="total-row">
+      <span class="total-label">Delivery</span>
+      <span class="total-value">Free</span>
+    </div>
+    <div class="total-row grand">
+      <span class="total-label">Total</span>
+      <span class="total-value">KES ${order.total.toLocaleString()}</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-note">Thank you for your order!<br>Payment due upon delivery.</div>
+    <div class="footer-brand">65° Roastery</div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+</body>
+</html>`;
+
+    const win = window.open("", "_blank");
+    win.document.write(html);
+    win.document.close();
+  };
 
   const filteredOrders =
     statusFilter === "all"
@@ -1356,7 +1543,10 @@ export default function Admin() {
               >
                 Close
               </button>
-              <button className="admin-btn-primary" onClick={handlePrint}>
+              <button
+                className="admin-btn-primary"
+                onClick={() => handlePrint(invoiceOrder)}
+              >
                 <svg
                   width="14"
                   height="14"
