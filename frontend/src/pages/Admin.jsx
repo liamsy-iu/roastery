@@ -59,8 +59,16 @@ function Invoice({ order }) {
     <div className="invoice-doc">
       <div className="invoice-header">
         <div>
-          <div className="invoice-brand-name">65°</div>
-          <div className="invoice-brand-sub">Specialty Coffee Roastery</div>
+          <img
+            src="/logo.png"
+            alt="65° Coffee Roastery"
+            style={{
+              height: 80,
+              width: "auto",
+              marginBottom: 8,
+              objectFit: "contain",
+            }}
+          />
           <div className="invoice-brand-addr">
             Nairobi, Kenya
             <br />

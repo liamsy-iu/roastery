@@ -1462,9 +1462,36 @@
     text-align: center;
   }
 
+  .invoice-modal {
+    border-radius: 16px 16px 0 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  .invoice-preview {
+    padding: 16px 16px 0;
+  }
+  .invoice-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .invoice-meta {
+    text-align: left;
+  }
+  .invoice-meta-row {
+    justify-content: flex-start;
+  }
   .invoice-items th:nth-child(2),
   .invoice-items td:nth-child(2) {
     display: none;
+  }
+  .invoice-modal-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding: 14px 16px;
+  }
+  .invoice-modal-actions button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1472,21 +1499,98 @@
    PRINT STYLES — clean invoice output
    ============================================================ */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
   body * {
-    visibility: hidden;
+    visibility: hidden !important;
   }
-  .invoice-print-area,
-  .invoice-print-area * {
-    visibility: visible;
+
+  .invoice-modal,
+  .invoice-modal * {
+    visibility: visible !important;
   }
-  .invoice-print-area {
-    position: fixed;
-    inset: 0;
-    padding: 32px;
-    background: white;
+
+  .invoice-modal {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
   }
-  .admin-modal-backdrop {
-    display: none;
+
+  .invoice-modal-actions,
+  .admin-modal-header {
+    display: none !important;
+  }
+
+  .invoice-preview {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .invoice-brand-name {
+    font-size: 26px !important;
+  }
+  .invoice-brand-addr {
+    font-size: 11px !important;
+  }
+  .invoice-meta h2 {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  .invoice-meta-row {
+    font-size: 11px !important;
+    margin-bottom: 2px !important;
+  }
+  .invoice-header {
+    margin-bottom: 16px !important;
+    padding-bottom: 12px !important;
+  }
+  .invoice-bill-to {
+    margin-bottom: 14px !important;
+  }
+  .invoice-customer-name {
+    font-size: 14px !important;
+  }
+  .invoice-customer-detail {
+    font-size: 11px !important;
+  }
+  .invoice-items th {
+    font-size: 9px !important;
+    padding: 7px 10px !important;
+  }
+  .invoice-items td {
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+  }
+  .invoice-items {
+    margin-bottom: 14px !important;
+  }
+  .invoice-totals {
+    margin-bottom: 16px !important;
+    gap: 4px !important;
+  }
+  .invoice-total-row {
+    font-size: 12px !important;
+  }
+  .invoice-total-row.grand {
+    font-size: 14px !important;
+  }
+  .invoice-footer-note {
+    font-size: 10px !important;
+  }
+  .invoice-footer-brand {
+    font-size: 16px !important;
+  }
+  img {
+    max-height: 80px !important;
   }
 }
 
